@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/shared_prefs.dart';
 import 'app_background.dart';
-//import '../completed_task_page3.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 var homePageKey3 = GlobalKey<_HomePageState3>();
@@ -15,7 +14,6 @@ class HomePage3 extends StatefulWidget {
 
 class _HomePageState3 extends State<HomePage3> {
   List<String> listItems3 = [];
-  List<String> completedItems = [];
 
   bool _validate = false;
 
@@ -28,7 +26,6 @@ class _HomePageState3 extends State<HomePage3> {
   void _init() async {
     await SharePrefs3.setInstance();
     listItems3 = SharePrefs3.getListItems();
-    //completedItems = SharePrefs.getCompletedItems();
     setState(() {});
   }
 
@@ -51,20 +48,6 @@ class _HomePageState3 extends State<HomePage3> {
       appBar: AppBar(
         title: Text("Not Urgent And Not Important"),
         backgroundColor: Colors.blueAccent,
-        /*
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: () {
-              setState(() {});
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CompletedTasks(),
-                ),
-              );
-            },
-          ),
-        ],*/
       ),
       body: Stack(
         children: <Widget>[
@@ -103,12 +86,7 @@ class _HomePageState3 extends State<HomePage3> {
                                 setState(() {});
                               } else {
                                 _validate = false;
-                                completedItems.add('false');
                                 listItems3.add(text);
-                                /*SharePrefs.setCompletedItems(completedItems)
-                                    .then((_) {
-                                  setState(() {});
-                                });*/
                                 SharePrefs3.setListItems(listItems3).then((_) {
                                   setState(() {});
                                 });
@@ -137,16 +115,11 @@ class _HomePageState3 extends State<HomePage3> {
                                   setState(() {});
                                 } else {
                                   _validate = false;
-                                  completedItems.add('false');
                                   // add a item
                                   listItems3.add(eCtrl.text);
                                   SharePrefs3.setListItems(listItems3).then((_) {
                                     setState(() {});
                                   });
-                                  /*SharePrefs.setCompletedItems(completedItems)
-                                      .then((_) {
-                                    setState(() {});
-                                  });*/
                                   eCtrl.clear();
                                 }
                               },
@@ -187,39 +160,12 @@ class _HomePageState3 extends State<HomePage3> {
                                           ),
                                           onTap: () {
                                             listItems3.removeAt(index3);
-                                            completedItems.removeAt(index3);
                                             SharePrefs3.setListItems(listItems3)
                                                 .then((_) {
                                               setState(() {});
                                             });
-                                            /*
-                                            SharePrefs.setCompletedItems(
-                                                    completedItems)
-                                                .then((_) {
-                                              setState(() {});
-                                            });*/
                                           }),
                                     ),
-                                    /*
-                                    Container(
-                                        width: 30,
-                                        child: InkWell(
-                                          child: Icon(
-                                            (completedItems[index] == 'false')
-                                                ? Icons.check_box_outline_blank
-                                                : Icons.check_box,
-                                            color: Colors.greenAccent,
-                                          ),
-                                          onTap: () {
-                                            if (completedItems[index] ==
-                                                'false') {
-                                              completedItems[index] = 'true';
-                                            } else {
-                                              completedItems[index] = 'false';
-                                            }
-                                            setState(() {});
-                                          },
-                                        )),*/
                                   ],
                                 ),
                                 onTap: () {
@@ -227,57 +173,6 @@ class _HomePageState3 extends State<HomePage3> {
                                 },
                               ),
                             ),
-                            /*
-                            actions: <Widget>[
-                              (completedItems[index] == 'false')
-                                  ? IconSlideAction(
-                                      caption: 'Complete',
-                                      color: Colors.greenAccent,
-                                      icon: IconData(58826,
-                                          fontFamily: 'MaterialIcons'),
-                                      onTap: () {
-                                        if (completedItems[index] == 'false') {
-                                          completedItems[index] = 'true';
-                                        } else {
-                                          completedItems[index] = 'false';
-                                        }
-                                        setState(() {});
-                                      },
-                                    )
-                                  : IconSlideAction(
-                                      caption: 'Undo',
-                                      color: Colors.grey,
-                                      icon: IconData(58826,
-                                          fontFamily: 'MaterialIcons'),
-                                      onTap: () {
-                                        if (completedItems[index] == 'false') {
-                                          completedItems[index] = 'true';
-                                        } else {
-                                          completedItems[index] = 'false';
-                                        }
-                                        setState(() {});
-                                      },
-                                    )
-                            ],
-                            secondaryActions: <Widget>[
-                              IconSlideAction(
-                                caption: 'Delete',
-                                color: Colors.red,
-                                icon: Icons.delete,
-                                onTap: () {
-                                  listItems.removeAt(index);
-                                  completedItems.removeAt(index);
-
-                                  SharePrefs.setListItems(listItems).then((_) {
-                                    setState(() {});
-                                  });
-                                  SharePrefs.setCompletedItems(completedItems)
-                                      .then((_) {
-                                    setState(() {});
-                                  });
-                                },
-                              ),
-                            ],*/
                           ),
                         );
                       },
@@ -285,7 +180,6 @@ class _HomePageState3 extends State<HomePage3> {
                   ),
                 ],
               ),
-              //CompletedTasks(),
             ],
           ),
         ],

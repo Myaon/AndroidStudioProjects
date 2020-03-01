@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/shared_prefs.dart';
 import 'app_background.dart';
-import 'completed_task_page1.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 var homePageKey1 = GlobalKey<_HomePageState1>();
@@ -14,8 +13,7 @@ class HomePage1 extends StatefulWidget {
 }
 
 class _HomePageState1 extends State<HomePage1> {
-  List<String> listItems = [];
-  List<String> completedItems = [];
+  List<String> listItems1 = [];
 
   bool _validate = false;
 
@@ -26,9 +24,8 @@ class _HomePageState1 extends State<HomePage1> {
   );
 
   void _init() async {
-    await SharePrefs.setInstance();
-    listItems = SharePrefs.getListItems();
-    completedItems = SharePrefs.getCompletedItems();
+    await SharePrefs1.setInstance();
+    listItems1 = SharePrefs1.getListItems();
     setState(() {});
   }
 
@@ -49,21 +46,8 @@ class _HomePageState1 extends State<HomePage1> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("To Do list App"),
+        title: Text("Not Urgent But Important"),
         backgroundColor: Colors.blueAccent,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: () {
-              setState(() {});
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CompletedTasks(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Stack(
         children: <Widget>[
@@ -87,7 +71,7 @@ class _HomePageState1 extends State<HomePage1> {
                               border: InputBorder.none,
                               hintText: "Things to do",
                               errorText:
-                                  _validate ? 'The input is empty.' : null,
+                              _validate ? 'The input is empty.' : null,
                               contentPadding: const EdgeInsets.only(
                                   left: 25.0, bottom: 15.0, top: 15.0),
                               focusedBorder: OutlineInputBorder(
@@ -102,13 +86,8 @@ class _HomePageState1 extends State<HomePage1> {
                                 setState(() {});
                               } else {
                                 _validate = false;
-                                completedItems.add('false');
-                                listItems.add(text);
-                                SharePrefs.setCompletedItems(completedItems)
-                                    .then((_) {
-                                  setState(() {});
-                                });
-                                SharePrefs.setListItems(listItems).then((_) {
+                                listItems1.add(text);
+                                SharePrefs1.setListItems(listItems1).then((_) {
                                   setState(() {});
                                 });
                                 eCtrl.clear();
@@ -136,13 +115,9 @@ class _HomePageState1 extends State<HomePage1> {
                                   setState(() {});
                                 } else {
                                   _validate = false;
-                                  completedItems.add('false');
-                                  listItems.add(eCtrl.text);
-                                  SharePrefs.setListItems(listItems).then((_) {
-                                    setState(() {});
-                                  });
-                                  SharePrefs.setCompletedItems(completedItems)
-                                      .then((_) {
+                                  // add a item
+                                  listItems1.add(eCtrl.text);
+                                  SharePrefs1.setListItems(listItems1).then((_) {
                                     setState(() {});
                                   });
                                   eCtrl.clear();
@@ -156,11 +131,11 @@ class _HomePageState1 extends State<HomePage1> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: listItems.length,
+                      itemCount: listItems1.length,
                       scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (BuildContext context, int index1) {
                         return Dismissible(
-                          key: ObjectKey(listItems[index]),
+                          key: ObjectKey(listItems1[index1]),
                           child: Slidable(
                             actionPane: SlidableDrawerActionPane(),
                             actionExtentRatio: 0.25,
@@ -173,9 +148,9 @@ class _HomePageState1 extends State<HomePage1> {
                               child: ListTile(
                                 title: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Expanded(child: Text(listItems[index])),
+                                    Expanded(child: Text(listItems1[index1])),
                                     Container(
                                       width: 40,
                                       child: InkWell(
@@ -184,38 +159,13 @@ class _HomePageState1 extends State<HomePage1> {
                                             color: Colors.redAccent,
                                           ),
                                           onTap: () {
-                                            listItems.removeAt(index);
-                                            completedItems.removeAt(index);
-                                            SharePrefs.setListItems(listItems)
-                                                .then((_) {
-                                              setState(() {});
-                                            });
-                                            SharePrefs.setCompletedItems(
-                                                    completedItems)
+                                            listItems1.removeAt(index1);
+                                            SharePrefs1.setListItems(listItems1)
                                                 .then((_) {
                                               setState(() {});
                                             });
                                           }),
                                     ),
-                                    Container(
-                                        width: 30,
-                                        child: InkWell(
-                                          child: Icon(
-                                            (completedItems[index] == 'false')
-                                                ? Icons.check_box_outline_blank
-                                                : Icons.check_box,
-                                            color: Colors.greenAccent,
-                                          ),
-                                          onTap: () {
-                                            if (completedItems[index] ==
-                                                'false') {
-                                              completedItems[index] = 'true';
-                                            } else {
-                                              completedItems[index] = 'false';
-                                            }
-                                            setState(() {});
-                                          },
-                                        )),
                                   ],
                                 ),
                                 onTap: () {
@@ -223,56 +173,6 @@ class _HomePageState1 extends State<HomePage1> {
                                 },
                               ),
                             ),
-                            actions: <Widget>[
-                              (completedItems[index] == 'false')
-                                  ? IconSlideAction(
-                                      caption: 'Complete',
-                                      color: Colors.greenAccent,
-                                      icon: IconData(58826,
-                                          fontFamily: 'MaterialIcons'),
-                                      onTap: () {
-                                        if (completedItems[index] == 'false') {
-                                          completedItems[index] = 'true';
-                                        } else {
-                                          completedItems[index] = 'false';
-                                        }
-                                        setState(() {});
-                                      },
-                                    )
-                                  : IconSlideAction(
-                                      caption: 'Undo',
-                                      color: Colors.grey,
-                                      icon: IconData(58826,
-                                          fontFamily: 'MaterialIcons'),
-                                      onTap: () {
-                                        if (completedItems[index] == 'false') {
-                                          completedItems[index] = 'true';
-                                        } else {
-                                          completedItems[index] = 'false';
-                                        }
-                                        setState(() {});
-                                      },
-                                    )
-                            ],
-                            secondaryActions: <Widget>[
-                              IconSlideAction(
-                                caption: 'Delete',
-                                color: Colors.red,
-                                icon: Icons.delete,
-                                onTap: () {
-                                  listItems.removeAt(index);
-                                  completedItems.removeAt(index);
-
-                                  SharePrefs.setListItems(listItems).then((_) {
-                                    setState(() {});
-                                  });
-                                  SharePrefs.setCompletedItems(completedItems)
-                                      .then((_) {
-                                    setState(() {});
-                                  });
-                                },
-                              ),
-                            ],
                           ),
                         );
                       },
@@ -280,7 +180,6 @@ class _HomePageState1 extends State<HomePage1> {
                   ),
                 ],
               ),
-              CompletedTasks(),
             ],
           ),
         ],
